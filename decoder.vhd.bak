@@ -1,0 +1,17 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity decoder is
+    port (
+        ENDERECO: in std_logic_vector(31 downto 0);		
+        habMEM  : out std_logic
+	);
+end entity;
+
+architecture decoderArch of decoder is
+
+begin
+    habMEM <= not(habMEM(16) or habMEM(17) or habMEM(18) or habMEM(19) or habMEM(20) or habMEM(21) or habMEM(22) or habMEM(23) 
+                 or habMEM(24) or habMEM(25) or habMEM(26) or habMEM(27) or habMEM(28) or habMEM(29) or habMEM(30) or habMEM(31));	
+end architecture;
