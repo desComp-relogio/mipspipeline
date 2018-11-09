@@ -84,7 +84,9 @@ begin
         PC_OUT => aux_pc_out,
         PC_RESET => not KEY(3),
         ZERO_aux => aux_ula_z,
-        SOM_BEQ => aux_som_beq
+        SOM_BEQ => aux_som_beq,
+        HAB_LEITURA_MEM => aux_hab_leitura_mem,
+        HAB_ESCRITA_MEM => aux_hab_escrita_mem
     );
 
     memoria: entity work.memoriaAll port map(
