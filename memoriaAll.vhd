@@ -11,7 +11,7 @@ entity memoriaAll is
         WR              : in STD_LOGIC;
 
         DATA_MEM_R      : out STD_LOGIC_VECTOR(31 DOWNTO 0);
-		  HM					: out std_logic
+		HM			    : out std_logic
 	);
 end entity;
 
