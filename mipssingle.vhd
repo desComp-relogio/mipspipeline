@@ -177,7 +177,7 @@ begin
                 aux_hex_2 <= "000" & aux_ula_z;
                 aux_hex_3 <= "000" & aux_beq; -- ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 aux_hex_4 <= "000" & aux_mux_pc_beq_jmp;
-                aux_hex_5 <= "0000";
+                aux_hex_5 <= "000" & clock;
                 aux_hex_6 <= "0000";
                 aux_hex_7 <= "0000";
 
