@@ -2,7 +2,6 @@ library IEEE;
 
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity somador is
 	port (
@@ -16,5 +15,5 @@ end entity;
 
 architecture somadorArch of somador is
 begin
-	Q <=  A + B;
+	Q <=  std_logic_vector(to_unsigned(to_integer(unsigned(A)) + to_integer(unsigned(B)), Q'length));
 end architecture;

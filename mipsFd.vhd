@@ -38,11 +38,15 @@ entity mipsFd is
         DEBUG_AUX_HM            : out STD_LOGIC;
         DEBUG_ZERO_aux	        : out STD_LOGIC;
         DEBUG_MEM_W             : out STD_LOGIC_VECTOR(31 DOWNTO 0);
+		  DEBUG_MEM_R				  : out STD_LOGIC_VECTOR(31 DOWNTO 0);
         DEBUG_DATA_MEM_ADDR     : out STD_LOGIC_VECTOR(31 DOWNTO 0);
         DEBUG_PC_OUT            : out STD_LOGIC_VECTOR(31 DOWNTO 0);
-        DEBUG_PC4_BADD          : out STD_LOGIC_VECTOR(31 DOWNTO 0)
+        DEBUG_PC4_BADD          : out STD_LOGIC_VECTOR(31 DOWNTO 0);
+		  DEBUG_WRITE_REGISTER    : out STD_LOGIC_VECTOR(4 DOWNTO 0);
+		  DEBUG_HAB_ESCRITA_REG	  : out STD_LOGIC;
+		  DEBUG_WRITE_DATA    	  : out STD_LOGIC_VECTOR(31 DOWNTO 0);
+		  DEBUG_SEL_ULA_MEM		  : out STD_LOGIC
 
-        
     );
 
 end entity;
@@ -211,7 +215,7 @@ begin
 
     muxRtRd         : entity work.mux2 generic map (data_len => 5) port map(A =>  aux_idex_i16, B =>  aux_idex_i11, SEL => aux_idex_ex(3), Q => aux_mux_rt_rd_out);
     muxRtImm        : entity work.mux2 port map(A => aux_idex_r2, B => aux_idex_extend, SEL => aux_idex_ex(0), Q => aux_mux_rt_imm_out);
-    muxUlaMem       : entity work.mux2 port map(A => aux_memwb_data_mem_r, B => aux_memwb_end_mem, SEL => aux_memwb_wb(0), Q => aux_ula_mem_out);     
+    muxUlaMem       : entity work.mux2 port map(A => aux_memwb_data_mem_r, B => aux_memwb_end_mem, SEL => not aux_memwb_wb(0), Q => aux_ula_mem_out);     
 
     pc_src <= aux_exmem_m(2) and aux_exmem_z;
 --    terra <= '0';
@@ -235,5 +239,10 @@ begin
     DEBUG_DATA_MEM_ADDR      <= aux_exmem_ular;
     DEBUG_PC_OUT             <= aux_pc_out;
     DEBUG_PC4_BADD           <= aux_exmem_som_beq;
-
+	 DEBUG_MEM_R				  <= aux_memwb_data_mem_r;
+	 DEBUG_WRITE_REGISTER	  <= aux_memwb_rtrd;
+	 DEBUG_HAB_ESCRITA_REG    <= aux_memwb_wb(1);
+	 DEBUG_WRITE_DATA			  <= aux_ula_mem_out;
+	 DEBUG_SEL_ULA_MEM			<= aux_memwb_wb(0);
+	 
 end architecture;

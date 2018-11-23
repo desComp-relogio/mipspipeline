@@ -45,11 +45,20 @@ architecture mipssingleArch of mipssingle is
     signal aux_hm				  : STD_LOGIC;
     signal aux_ula_z			  : STD_LOGIC;
     signal aux_som_beq			  : STD_LOGIC_VECTOR(31 downto 0);
+	 
+	 signal aux_hab_escrita_reg_debug  : STD_LOGIC;
+
+	 signal aux_write_data        : STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+    signal aux_write_register	  : STD_LOGIC_VECTOR(4 downto 0);
+	 
+	 signal aux_sel_ula_mem			: STD_LOGIC;
 
     signal aux_hex_0, aux_hex_1, aux_hex_2, aux_hex_3, aux_hex_4, aux_hex_5, aux_hex_6, aux_hex_7 : STD_LOGIC_VECTOR(3 downto 0);
     signal sw_value : STD_LOGIC_VECTOR(3 DOWNTO 0);
     signal edge_detector_clk	: STD_LOGIC;
     signal clock                : STD_LOGIC;
+	 
     -- eae meu bacano é quarta feira ja? amanha e quarta feira meus bacanos
 begin
     edgeDetector: entity work.edgeDetector(bordaSubida) port map(clk => CLOCK_50, entrada => not KEY(0), saida => edge_detector_clk);
@@ -96,10 +105,15 @@ begin
           DEBUG_AUX_OP_OUT		=> aux_op_out_top,
           DEBUG_AUX_HM          => aux_hm,
           DEBUG_ZERO_aux	    => aux_ula_z,
-          DEBUG_MEM_W           => aux_data_mem_r,
+          DEBUG_MEM_W           => aux_data_mem_w,
+			 DEBUG_MEM_R			  => aux_data_mem_r,
           DEBUG_DATA_MEM_ADDR   => aux_end_mem,
           DEBUG_PC_OUT          => aux_pc_out,
-          DEBUG_PC4_BADD        => aux_som_beq
+          DEBUG_PC4_BADD        => aux_som_beq,
+			 DEBUG_WRITE_REGISTER  => aux_write_register,
+			 DEBUG_HAB_ESCRITA_REG => aux_hab_escrita_reg_debug,
+			 DEBUG_WRITE_DATA		  => aux_write_data,
+			 DEBUG_SEL_ULA_MEM		=> aux_sel_ula_mem
     );
 
 	
@@ -177,8 +191,8 @@ begin
                 aux_hex_2 <= "000" & aux_ula_z;
                 aux_hex_3 <= "000" & aux_beq; -- ! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 aux_hex_4 <= "000" & aux_mux_pc_beq_jmp;
-                aux_hex_5 <= "000" & clock;
-                aux_hex_6 <= "0000";
+                aux_hex_5 <= "000" & aux_hab_escrita_reg_debug;
+                aux_hex_6 <= "000" & aux_sel_ula_mem;
                 aux_hex_7 <= "0000";
 
             when "0101" =>
@@ -221,6 +235,7 @@ begin
                 aux_hex_5 <= aux_pc_out(23 DOWNTO 20);
                 aux_hex_6 <= aux_pc_out(27 DOWNTO 24);
                 aux_hex_7 <= aux_pc_out(31 DOWNTO 28);
+					 
             when "1001" => 
 				aux_hex_0 <= aux_som_beq(3 DOWNTO 0);
                 aux_hex_1 <= aux_som_beq(7 DOWNTO 4);
@@ -231,6 +246,26 @@ begin
                 aux_hex_6 <= aux_som_beq(27 DOWNTO 24);
                 aux_hex_7 <= aux_som_beq(31 DOWNTO 28);
 				
+				when "1011" => 
+					 aux_hex_0 <= aux_write_register(3 DOWNTO 0);
+                aux_hex_1 <= "000" & aux_write_register(4);
+                aux_hex_2 <= "0000";		
+                aux_hex_3 <= "0000";
+                aux_hex_4 <= "0000";
+                aux_hex_5 <= "0000";
+                aux_hex_6 <= "0000";
+                aux_hex_7 <= "0000";
+					 
+				when "1101" => 
+                aux_hex_0 <= aux_write_data(3 DOWNTO 0);
+                aux_hex_1 <= aux_write_data(7 DOWNTO 4);
+                aux_hex_2 <= aux_write_data(11 DOWNTO 8);		
+                aux_hex_3 <= aux_write_data(15 DOWNTO 12);
+                aux_hex_4 <= aux_write_data(19 DOWNTO 16);	
+                aux_hex_5 <= aux_write_data(23 DOWNTO 20);
+                aux_hex_6 <= aux_write_data(27 DOWNTO 24);
+                aux_hex_7 <= aux_write_data(31 DOWNTO 28);
+					 
             when others =>
                 aux_hex_0 <= "1111";
                 aux_hex_1 <= "1111";
