@@ -1,0 +1,39 @@
+Quartus Prime Archive log --	/home/raphacosta/mipspipeline/mipspipeline.qarlog
+
+Archive:	/home/raphacosta/mipspipeline/mipspipeline.qar
+Date:		Thu Nov 22 23:43:06 2018
+Quartus Prime		16.0.0 Build 211 04/27/2016 SJ Lite Edition
+
+	=========== Files Selected: ===========
+/home/raphacosta/altera_lite/16.0/quartus/linux64/assignment_defaults.qdf
+/home/raphacosta/mipspipeline/bancoRegistradores.vhd
+/home/raphacosta/mipspipeline/conversorHex7Seg.vhd
+/home/raphacosta/mipspipeline/decoder.vhd
+/home/raphacosta/mipspipeline/edgeDetector.vhd
+/home/raphacosta/mipspipeline/extensorSinal.vhdl
+/home/raphacosta/mipspipeline/initDATAMEM.mif
+/home/raphacosta/mipspipeline/initROM.mif
+/home/raphacosta/mipspipeline/memoriaAll.vhd
+/home/raphacosta/mipspipeline/memoriaDeDados.vhd
+/home/raphacosta/mipspipeline/memoriaDeInst.vhd
+/home/raphacosta/mipspipeline/mipsFd.vhd
+/home/raphacosta/mipspipeline/mipsUc.vhd
+/home/raphacosta/mipspipeline/mipspipeline.qpf
+/home/raphacosta/mipspipeline/mipspipeline.qsf
+/home/raphacosta/mipspipeline/mipssingle.vhd
+/home/raphacosta/mipspipeline/mux2.vhd
+/home/raphacosta/mipspipeline/mux32.vhd
+/home/raphacosta/mipspipeline/mux4.vhd
+/home/raphacosta/mipspipeline/output_files/Chain6.cdf
+/home/raphacosta/mipspipeline/pc.vhd
+/home/raphacosta/mipspipeline/registradorGenerico.vhd
+/home/raphacosta/mipspipeline/shifterLeft2.vhd
+/home/raphacosta/mipspipeline/somador.vhd
+/home/raphacosta/mipspipeline/tristate.vhd
+/home/raphacosta/mipspipeline/ulaMips.vhd
+/home/raphacosta/mipspipeline/ulaUc.vhd
+/home/raphacosta/mipspipeline/ulinha.vhd
+	======= Total: 28 files to archive =======
+
+	================ Status: ===============
+All files archived successfully.

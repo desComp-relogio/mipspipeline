@@ -38,17 +38,11 @@ entity mipsFd is
         DEBUG_AUX_HM            : out STD_LOGIC;
         DEBUG_ZERO_aux	        : out STD_LOGIC;
         DEBUG_MEM_W             : out STD_LOGIC_VECTOR(31 DOWNTO 0);
-		  DEBUG_MEM_R				  : out STD_LOGIC_VECTOR(31 DOWNTO 0);
         DEBUG_DATA_MEM_ADDR     : out STD_LOGIC_VECTOR(31 DOWNTO 0);
         DEBUG_PC_OUT            : out STD_LOGIC_VECTOR(31 DOWNTO 0);
-        DEBUG_PC4_BADD          : out STD_LOGIC_VECTOR(31 DOWNTO 0);
-		  DEBUG_WRITE_REGISTER    : out STD_LOGIC_VECTOR(4 DOWNTO 0);
-		  DEBUG_HAB_ESCRITA_REG	  : out STD_LOGIC;
-		  DEBUG_WRITE_DATA    	  : out STD_LOGIC_VECTOR(31 DOWNTO 0);
-		  DEBUG_SEL_ULA_MEM		  : out STD_LOGIC;
-		  DEBUG_AUX_OP				 : out STD_LOGIC_VECTOR(3 DOWNTO 0);
-		  DEBUG_FD_ULA_SLT			: out STD_LOGIC_VECTOR(31 DOWNTO 0)
+        DEBUG_PC4_BADD          : out STD_LOGIC_VECTOR(31 DOWNTO 0)
 
+        
     );
 
 end entity;
@@ -106,7 +100,7 @@ architecture mipsFdArch of mipsFd is
     signal pc_src                : STD_LOGIC;
     signal aux_data_mem_r        : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
---    signal terra                 : STD_LOGIC := '0';
+    signal terra                 : STD_LOGIC := '0';
 
 begin
     IFID            : entity work.registradorGenerico 
@@ -130,8 +124,8 @@ begin
         DIN(105 DOWNTO 74)  => aux_banco_reg1_out, 
         DIN(137 DOWNTO 106) => aux_ifid_pc4,
         DIN(141 DOWNTO 138) => MUX_RT_RD & ULA_OP & MUX_RT_IMM,        
-        DIN(144 DOWNTO 142) => BEQ & HAB_LEITURA_MEM & HAB_ESCRITA_MEM,
-        DIN(146 DOWNTO 145) => HAB_ESCRITA_REG & MUX_ULA_MEM,
+        DIN(144 DOWNTO 142) => BEQ & HAB_LEITURA_MEM & HAB_ESCRITA_MEM
+        DIN(146 DOWNTO 145) => HAB_ESCRITA_REG & MUX_ULA_MEM
 
         DOUT(146 DOWNTO 145)=> aux_idex_wb,
         DOUT(144 DOWNTO 142)=> aux_idex_m,
@@ -157,16 +151,13 @@ begin
         DIN(104 DOWNTO 102) => aux_idex_m,
         DIN(106 DOWNTO 105) => aux_idex_wb,
 
-        DOUT(4 DOWNTO 0)    => aux_exmem_rtrd,
+        DOUT(4 DOWNTO 0)    => aux_exmem_rtrd
         DOUT(36 DOWNTO 5)   => aux_exmem_wd,
         DOUT(68 DOWNTO 37)  => aux_exmem_ular,
         DOUT(69)            => aux_exmem_z,
         DOUT(101 DOWNTO 70) => aux_exmem_som_beq,
         DOUT(104 DOWNTO 102)=> aux_exmem_m,
-        DOUT(106 DOWNTO 105)=> aux_exmem_wb,
-		  ENABLE => '1',
-        CLK => CLK,
-        RST => '0'
+        DOUT(106 DOWNTO 105)=> aux_exmem_wb
     );
 
     MEMWB            : entity work.registradorGenerico generic map(larguraDados => 71) port map (
@@ -176,17 +167,14 @@ begin
         DIN(70 DOWNTO 69)   => aux_exmem_wb,
 
         DOUT(4 DOWNTO 0)     => aux_memwb_rtrd,
-        DOUT(36 DOWNTO 5)    => aux_memwb_end_mem,
+        DOUT(36 DOWNTO 5)    => aux_memwb_ular,
         DOUT(68 DOWNTO 37)   => aux_memwb_data_mem_r,
-        DOUT(70 DOWNTO 69)   => aux_memwb_wb,
-		  ENABLE => '1',
-        CLK => CLK,
-        RST => '0'
+        DOUT(70 DOWNTO 69)   => aux_memwb_wb
     );
 
     memoriaDeDados  : entity work.memoriaAll port map (
         CLK => CLK, END_MEM => aux_exmem_ular, DATA_MEM_W => aux_exmem_wd, RD => aux_exmem_m(1), WR => aux_exmem_m(0), 
-        DATA_MEM_R => aux_data_mem_r, HM => DEBUG_AUX_HM
+        DATA_MEM_R => aux_data_mem_r, HM => terra
     );
 
 	PC				: entity work.registradorGenerico port map(DIN => aux_pc_in, DOUT => aux_pc_out, ENABLE => '1', CLK => CLK, RST => aux_pc_reset);
@@ -200,7 +188,7 @@ begin
 
     ula             : entity work.ulaMips port map(
         A => aux_idex_r1, B => aux_mux_rt_imm_out, SEL => aux_op(1 DOWNTO 0), INVERTE_A => aux_op(3), INVERTE_B => aux_op(2), CIN => aux_op(2),
-        R => aux_ula_out, ZERO => aux_ula_z, DEBUG_ULA_SLT => DEBUG_FD_ULA_SLT
+        R => aux_ula_out, ZERO => aux_ula_z
     ); 
 	 
     ucUla           : entity work.ulaUc port map(FUNCT => aux_idex_extend(5 DOWNTO 0), ULA_OP => aux_idex_ex(2 DOWNTO 1), Q => aux_op);
@@ -217,13 +205,15 @@ begin
 
     muxRtRd         : entity work.mux2 generic map (data_len => 5) port map(A =>  aux_idex_i16, B =>  aux_idex_i11, SEL => aux_idex_ex(3), Q => aux_mux_rt_rd_out);
     muxRtImm        : entity work.mux2 port map(A => aux_idex_r2, B => aux_idex_extend, SEL => aux_idex_ex(0), Q => aux_mux_rt_imm_out);
-    muxUlaMem       : entity work.mux2 port map(A => aux_memwb_data_mem_r, B => aux_memwb_end_mem, SEL => not aux_memwb_wb(0), Q => aux_ula_mem_out);     
+    muxUlaMem       : entity work.mux2 port map(A => aux_memwb_data_mem_r, B => aux_memwb_end_mem, SEL => aux_memwb_wb(0), Q => aux_ula_mem_out);
+    muxBeq          : entity work.mux2 port map(A => aux_som_pc_out, B => aux_som_beq_out, SEL => pc_src, Q => aux_mux_beq_out);
+     
 
     pc_src <= aux_exmem_m(2) and aux_exmem_z;
---    terra <= '0';
+    terra <= '0';
 
     --OPCODE SAIDA PRO FD
-    INST_OPCODE <= aux_ifid_inst(31 downto 26);
+    INST_OPCODE <= aux_mem_inst_out(31 downto 26);
 
     --ENTRADA DA PLACA
     aux_pc_reset <= PC_RESET;
@@ -234,18 +224,12 @@ begin
     DEBUG_DADO_LIDO_1        <= aux_idex_r1;
     DEBUG_DADO_LIDO_2        <= aux_idex_r2;
     DEBUG_ULA_OUT			 <= aux_exmem_ular;
-    DEBUG_AUX_OP_OUT		 	<= aux_op;
---    DEBUG_AUX_HM             <= terra;--
-    DEBUG_ZERO_aux	        <= aux_exmem_z;
+    DEBUG_AUX_OP_OUT		 <= aux_op;
+    DEBUG_AUX_HM             <= terra;
+    DEBUG_ZERO_aux	         <= aux_exmem_z;
     DEBUG_MEM_W              <= aux_exmem_wd;
     DEBUG_DATA_MEM_ADDR      <= aux_exmem_ular;
     DEBUG_PC_OUT             <= aux_pc_out;
     DEBUG_PC4_BADD           <= aux_exmem_som_beq;
-	 DEBUG_MEM_R				  <= aux_memwb_data_mem_r;
-	 DEBUG_WRITE_REGISTER	  <= aux_memwb_rtrd;
-	 DEBUG_HAB_ESCRITA_REG    <= aux_memwb_wb(1);
-	 DEBUG_WRITE_DATA			  <= aux_ula_mem_out;
-	 DEBUG_SEL_ULA_MEM			<= aux_memwb_wb(0);
-	 DEBUG_AUX_OP					<= aux_op;
-	 
+
 end architecture;

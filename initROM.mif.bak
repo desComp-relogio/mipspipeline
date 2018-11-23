@@ -1,0 +1,39 @@
+-- Copyright (C) 2017  Intel Corporation. All rights reserved.
+-- Your use of Intel Corporation's design tools, logic functions
+-- and other software and tools, and its AMPP partner logic
+-- functions, and any output files from any of the foregoing
+-- (including device programming or simulation files), and any
+-- associated documentation or information are expressly subject
+-- to the terms and conditions of the Intel Program License
+-- Subscription Agreement, the Intel Quartus Prime License Agreement,
+-- the Intel FPGA IP License Agreement, or other applicable license
+-- agreement, including, without limitation, that your use is for
+-- the sole purpose of programming logic devices manufactured by
+-- Intel and sold by Intel or its authorized distributors.  Please
+-- refer to the applicable agreement for further details.
+
+WIDTH=32;
+DEPTH=64;
+ADDRESS_RADIX=DEC;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+--endereco : dado;
+    0     :   00000000;
+    1     :   8C040004; -- Carrega o valor 4 da memoria(4) no regustrador 4
+    -- 2    :   AC04000A; -- Guarda o valor do registrador 4 na memoria de posicao 10
+    -- 3    :   8C07000A; -- Guarda o valor da posicao de memoria 10 no registrador 7
+    -- 4    :   08000000; -- Jump para o endereco 0
+    2     :   00000000;
+    3     :   00000000;
+    4     :   00000000;
+    5     :   00042820; -- Soma o registrador 4 com o reg 0 e guarda no 5
+    6     :   00053020; -- Soma o registrador 5 com o 0 e guarda no 6
+    7     :   00000000;
+    8     :   00000000;
+    9     :   00000000;
+    10    :   10850018; -- Compara reg 4 com reg 5, se igual vai 2 instrucoes pra frente
+    11    :   00000000;
+    12    :   08000000;
+    [13..62]: 2A2A2A2A;
+END;

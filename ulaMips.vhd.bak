@@ -8,15 +8,14 @@ entity ulaMips is
 		-- Input ports
 		A				: in  std_logic_vector(31 downto 0);
 		B				: in  std_logic_vector(31 downto 0);
-		SEL 			: in  std_logic_vector(1 downto 0);
+		SEL 		: in  std_logic_vector(1 downto 0);
 		INVERTE_A	: in std_logic;
 		INVERTE_B	: in std_logic;
 		CIN 		: in std_logic;
 
 		-- Output ports
 		R 			: out std_logic_vector(31 downto 0);
-		ZERO		: out std_logic;
-		DEBUG_ULA_SLT: out std_logic_vector(31 downto 0)
+		ZERO		: out std_logic
 	);
 end ulaMips;
 
@@ -39,8 +38,6 @@ begin
  	r_and <=	r_a and r_b;
 	
 	slt <= (0 => (r_ula(31) xor v), others => '0');
-	DEBUG_ULA_SLT <= slt;
-	
 	
 	
 	ZERO <= not(R(0) or R(1) or R(2) or R(3) or R(4) or R(5) or R(6) or R(7) or R(8) or R(9) or R(10)
